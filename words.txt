@@ -1,0 +1,6 @@
+﻿one = yksi
+two = kaksi
+three = kolme
+four = neljä
+five = viisi
+six = kuusi
