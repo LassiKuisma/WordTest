@@ -60,13 +60,13 @@ class WordGame:
                     word.increase_wrong_guesses()
                     print("Wrong, the word is '%s'." % word_pair[1])
                     print("Type the word so you will remember it")
-                    word_again = input(word_pair[0] + "=")
+                    word_again = get_input(word_pair[0] + "=")
                     if word_again.lower() != word_pair[1].lower():
                         print("Check your spelling!")
                         self.notify_check_spelling(word_pair[1], word_again)
             # end of for-loop
         # end of while
-        wants_stats = input("Game ended! Print stats on how well you did? [y/n]")
+        wants_stats = get_input("Game ended! Print stats on how well you did? [y/n]")
         if wants_stats == "y" or wants_stats == "yes":
             self.print_stats()
 
@@ -92,7 +92,7 @@ class WordGame:
 
     @staticmethod
     def ask_to_translate(word, translation):
-        answer = input("\nTranslate '%s':" % word)
+        answer = get_input("\nTranslate '%s':" % word)
         if answer == "EXIT":
             return 2
         if answer.lower() == translation.lower():
@@ -153,13 +153,17 @@ def split_lines(lines):
     return split_words
 
 
-# ====== MAIN ======
-print("Welcome to WordTest program!")
+def get_input(text):
+    return input(text)
 
-file_name = input("Give file name:")
-game = new_game_from_file(file_name)
-game.start_game()
 
-print("\nStopping program")
+if __name__ == '__main__':
+    print("Welcome to WordTest program!")
+
+    file_name = get_input("Give file name:")
+    game = new_game_from_file(file_name)
+    game.start_game()
+
+    print("\nStopping program")
 
 # EOF
