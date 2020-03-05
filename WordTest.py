@@ -1,13 +1,3 @@
-# WordTest
-# Author: Lassi Kuisma
-#
-# How to use:
-# Create .txt file of words you want to learn, encode in UTF-8. The words should be in format:
-# "word in language 1 = word in language 2"
-#
-# Currently the program doesn't do much error handling, it just crashes
-# in case it encounters a problem (just like the person who made it)
-
 class LearnedWord:
     def __init__(self, word, translation):
         self.word = word
@@ -37,9 +27,11 @@ class LearnedWord:
         total = self.correct + self.wrong
         if total == 0:
             return 0
-        return (self.correct / total)
+        return self.correct / total
+
 
 # ===========================
+
 
 class WordGame:
     def __init__(self, words):
@@ -47,6 +39,7 @@ class WordGame:
         self.learned_words = []
         for w in words:
             self.learned_words.append(LearnedWord(w[0], w[1]))
+
     def start_game(self):
         print("Starting game!")
         print("=" * 20)
@@ -76,28 +69,17 @@ class WordGame:
         wants_stats = input("Game ended! Print stats on how well you did? [y/n]")
         if wants_stats == "y" or wants_stats == "yes":
             self.print_stats()
-        
-        
-    def ask_to_translate(self, word, translation):
-        answer = input("\nTranslate '%s':" % word)
-        if answer == "EXIT":
-            return 2
-        if answer.lower() == translation.lower():
-            return 0
-        else:
-            return 1
 
-    
     def print_stats(self):
         print("Stats:")
         max_len_word = max(max(len(x.get_word()) for x in self.learned_words), len("Word"))
         max_len_trn = max(max(len(x.get_translation()) for x in self.learned_words), len("Translation"))
         print("%s %s %s %s %s" %
-                  ("Word".ljust(max_len_word),
-                   "Translation".ljust(max_len_trn),
-                   "Correct",
-                   "Wrong",
-                   "%"))
+              ("Word".ljust(max_len_word),
+               "Translation".ljust(max_len_trn),
+               "Correct",
+               "Wrong",
+               "%"))
 
         sorted_words = sorted(self.learned_words, key=lambda b: b.get_percent_correct(), reverse=True)
         for word in sorted_words:
@@ -108,7 +90,18 @@ class WordGame:
                    word.get_amount_wrong_guesses(),
                    word.get_percent_correct() * 100.0))
 
-    def notify_check_spelling(self, first, second):
+    @staticmethod
+    def ask_to_translate(word, translation):
+        answer = input("\nTranslate '%s':" % word)
+        if answer == "EXIT":
+            return 2
+        if answer.lower() == translation.lower():
+            return 0
+        else:
+            return 1
+
+    @staticmethod
+    def notify_check_spelling(first, second):
         error_index = -1
         for i in range(max(len(first), len(second))):
             if i >= len(first) or i >= len(second):
@@ -120,6 +113,7 @@ class WordGame:
         print(first)
         print(second)
         print(" " * error_index + "^")
+
 
 # ===========================
 
@@ -133,6 +127,7 @@ def new_game_from_file(path):
     # TODO: here we could ask if they want from lang_one -> lang_two or other way around
     return WordGame(spl)
 
+
 def load_words_from(path):
     lines = []
     with open(path, "r", encoding='utf-8-sig') as file:
@@ -141,6 +136,7 @@ def load_words_from(path):
             if len(ln) > 0:
                 lines.append(ln)
     return lines
+
 
 # Split lines read from file into tuples containing word and its translation
 # line: "One = yksi" -> ("One", "yksi")
@@ -155,16 +151,15 @@ def split_lines(lines):
             right = split_line[1].strip()
             split_words.append((left, right))
     return split_words
-    
 
-## ====== MAIN ======
+
+# ====== MAIN ======
 print("Welcome to WordTest program!")
 
 file_name = input("Give file name:")
 game = new_game_from_file(file_name)
 game.start_game()
 
-
 print("\nStopping program")
 
-## EOF
+# EOF
